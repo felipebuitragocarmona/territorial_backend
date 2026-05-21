@@ -44,7 +44,8 @@ def update_item(item_id):
         item = service.update(item_id, data)
         return jsonify(item.to_dict())
     except ValueError as ex:
-        return jsonify({"message": str(ex)}), 404
+        status = 404 if str(ex) == "Record not found" else 400
+        return jsonify({"message": str(ex)}), status
     except Exception as ex:
         return jsonify({"message": str(ex)}), 400
 

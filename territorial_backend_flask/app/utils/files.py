@@ -17,4 +17,4 @@ def save_uploaded_file(file, folder_name):
     folder = os.path.join(base, folder_name)
     os.makedirs(folder, exist_ok=True)
     file.save(os.path.join(folder, filename))
-    return f"{folder_name}/{filename}"
+    return f"/api/images/{folder_name}/{filename}"

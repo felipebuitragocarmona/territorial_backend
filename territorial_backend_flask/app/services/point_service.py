@@ -17,6 +17,14 @@ class PointService:
         return self.repository.search(value)
 
     def create(self, data):
+        has_neighborhood = data.get("id_neighborhood") not in (None, "")
+        has_annotation = data.get("id_annotation") not in (None, "")
+
+        if has_neighborhood and has_annotation:
+            raise ValueError("Solo se puede enviar uno de los dos campos: id_neighborhood o id_annotation")
+        if not has_neighborhood and not has_annotation:
+            raise ValueError("Debes enviar uno de los dos campos: id_neighborhood o id_annotation")
+
         return self.repository.create(data)
 
     def update(self, item_id, data):

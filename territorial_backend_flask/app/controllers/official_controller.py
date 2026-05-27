@@ -1,13 +1,11 @@
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify
 from app.services.official_service import OfficialService
-from app.services.official_tracking_service import OfficialTrackingService
 from app.utils.pagination import apply_pagination
 from app.utils.search import apply_search_filters
 from app.utils.files import save_uploaded_file
 
 bp = Blueprint("official", __name__, url_prefix="/api/officials")
 service = OfficialService()
-tracking_service = OfficialTrackingService()
 
 @bp.get("")
 def list_items():
@@ -55,26 +53,3 @@ def delete_item(item_id):
         return jsonify({"message": str(ex)}), 404
     except Exception as ex:
         return jsonify({"message": str(ex)}), 400
-
-
-@bp.post("/tracking/start")
-def start_tracking():
-    data = request.get_json() or {}
-    official_ids = data.get("ids")
-    if not isinstance(official_ids, list) or not official_ids:
-        return jsonify({"message": "ids must be a non-empty list"}), 400
-
-    app = current_app._get_current_object()
-    result = tracking_service.start_tracking(official_ids, app)
-    return jsonify(result)
-
-
-@bp.post("/tracking/stop")
-def stop_tracking():
-    data = request.get_json() or {}
-    official_ids = data.get("ids")
-    if official_ids is not None and not isinstance(official_ids, list):
-        return jsonify({"message": "ids must be a list when provided"}), 400
-
-    result = tracking_service.stop_tracking(official_ids)
-    return jsonify(result)

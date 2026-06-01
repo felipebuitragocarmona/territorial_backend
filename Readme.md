@@ -384,5 +384,114 @@ El sistema de valoración territorial es una plataforma digital diseñada para a
 |3b|La consulta no retorna datos → informa que no hay registros para los filtros indicados|
 |4a|Solo un tipo de gráfica aplica → el sistema deshabilita los formatos no pertinentes e indica el motivo|
 
+--- Ejemplo detallado
+
+Aquí está el caso de uso documentado para tu equipo:
+
+---
+
+## Caso de uso: Generación de reportes visuales
+
+**Actor:** Cliente (frontend / consumidor de API)
+**Endpoint:** `POST /reports`
+
+---
+
+### Descripción
+
+El cliente envía una consulta al backend a través del endpoint `/reports`. El backend procesa la query, determina qué tipo de visualización corresponde, y retorna una estructura JSON lista para ser renderizada con ApexCharts.
+
+---
+
+### Flujo principal
+
+**1. El cliente envía la petición**
+
+```http
+POST /reports
+Content-Type: application/json
+
+{
+  "query": "ventas por región del último trimestre"
+}
+```
+
+**2. El backend interpreta la query** y decide qué tipo de gráfica representa mejor los datos solicitados.
+
+**3. El backend retorna una de tres respuestas posibles:**
+
+---
+
+**Respuesta A — Gráfica de pastel** *(distribución proporcional)*
+
+```json
+{
+  "type": "pie",
+  "labels": ["Team A", "Team B", "Team C", "Team D", "Team E"],
+  "series": [44, 55, 13, 43, 22]
+}
+```
+
+Úsala cuando los datos representen partes de un todo (porcentajes, participación de mercado, distribución por categoría).
+
+---
+
+**Respuesta B — Gráfica de barras** *(comparación entre categorías)*
+
+```json
+{
+  "type": "bar",
+  "series": [
+    {
+      "name": "Servings",
+      "data": [44, 55, 41, 67, 22, 43, 21, 33, 45, 31, 87, 65, 35]
+    }
+  ]
+}
+```
+
+Úsala cuando se comparen valores entre elementos distintos (productos, regiones, periodos).
+
+---
+
+**Respuesta C — Gráfica de líneas** *(tendencia en el tiempo)*
+
+```json
+{
+  "type": "line",
+  "series": [
+    { "name": "High - 2013", "data": [28, 29, 33, 36, 32, 32, 33] },
+    { "name": "Low - 2013",  "data": [12, 11, 14, 18, 17, 13, 13] }
+  ]
+}
+```
+
+Úsala cuando los datos muestren evolución temporal o tendencias con una o varias series.
+
+---
+
+### Responsabilidad del frontend
+
+El frontend debe leer el campo `type` de la respuesta y renderizar el componente ApexCharts correspondiente. No necesita conocer de antemano qué tipo llegará — debe manejar los tres casos.
+
+```typescript
+switch (response.type) {
+  case 'pie':  // renderizar PieChartComponent
+  case 'bar':  // renderizar BarChartComponent
+  case 'line': // renderizar LineChartComponent
+}
+```
+
+---
+
+### Códigos de respuesta HTTP
+
+| Código | Situación |
+|--------|-----------|
+| `200 OK` | Query procesada correctamente, retorna el JSON de la gráfica |
+| `400 Bad Request` | El campo `query` viene vacío o malformado |
+| `422 Unprocessable` | La query no pudo asociarse a ningún tipo de gráfica |
+| `500 Internal Server Error` | Error en el procesamiento del backend |
+
 ---
 

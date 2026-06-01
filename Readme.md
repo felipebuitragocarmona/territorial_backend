@@ -493,5 +493,13 @@ switch (response.type) {
 | `422 Unprocessable` | La query no pudo asociarse a ningún tipo de gráfica |
 | `500 Internal Server Error` | Error en el procesamiento del backend |
 
+Aquí están los tres enlaces de referencia de ApexCharts que mencionaste:
+
+| Tipo | Enlace |
+|------|--------|
+| 🥧 Pie | https://apexcharts.com/angular-chart-demos/pie-charts/simple-pie/ |
+| 📊 Bar | https://apexcharts.com/angular-chart-demos/bar-charts/basic-bar/ |
+| 📈 Line | https://apexcharts.com/angular-chart-demos/line-charts/line-with-data-labels/ |
+
 ---
 

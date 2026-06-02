@@ -189,6 +189,7 @@ class ReportService:
         return sql
 
     def _execute_sql(self, sql_query: str) -> List[Dict]:
+        print(f"Executing SQL: {sql_query}")
         result = db.session.execute(text(sql_query))
         return [dict(row) for row in result.mappings().all()]
 

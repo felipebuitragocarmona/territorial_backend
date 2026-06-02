@@ -13,6 +13,7 @@ from app.controllers.annotation_category_controller import bp as annotation_cate
 from app.controllers.evidence_controller import bp as evidence_bp
 from app.controllers.official_controller import bp as official_bp
 from app.controllers.image_controller import bp as image_bp
+from app.controllers.report_controller import bp as report_bp
 
 def register_blueprints(app):
     app.register_blueprint(department_bp)
@@ -30,3 +31,4 @@ def register_blueprints(app):
     app.register_blueprint(evidence_bp)
     app.register_blueprint(official_bp)
     app.register_blueprint(image_bp)
+    app.register_blueprint(report_bp)
